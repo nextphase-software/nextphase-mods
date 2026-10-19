@@ -1,0 +1,27 @@
+{
+  "name": "nextphase-pipeline-view",
+  "version": "0.6.0",
+  "description": "Pipeline view: a pane and status line showing which stage your current piece of work is in and whether a decision is waiting for you, drawn from a snapshot your project's own collector prints.",
+  "author": {
+    "name": "NextPhase Software",
+    "url": "https://github.com/nextphase-software"
+  },
+  "types": "./types/index.d.ts",
+  "keywords": [
+    "pipeline",
+    "milestone",
+    "pane",
+    "status-line"
+  ],
+  "userConfig": {
+    "collector": {
+      "type": "string",
+      "title": "Collector command",
+      "description": "Optional fallback for every project: the absolute path of a collector program (see the plugin README). A project's own .claude/nextphase-pipeline-view.json takes precedence and needs your approval with /pipeline allow; this option, which you set yourself, does not. A .py file runs with python3.",
+      "default": ""
+    }
+  },
+  "homepage": "https://github.com/nextphase-software/nextphase-mods/tree/main/plugins/nextphase-pipeline-view",
+  "repository": "https://github.com/nextphase-software/nextphase-mods",
+  "license": "MIT"
+}

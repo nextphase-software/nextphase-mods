@@ -1,0 +1,22 @@
+{
+  "name": "nextphase",
+  "owner": {
+    "name": "NextPhase Software",
+    "url": "https://github.com/nextphase-software"
+  },
+  "metadata": {
+    "description": "Claude Code plugins from NextPhase Software: a live view of a project's delivery pipeline, and a per-task token breakdown."
+  },
+  "plugins": [
+    {
+      "name": "nextphase-task-tokens",
+      "source": "./plugins/nextphase-task-tokens",
+      "description": "Task tokens: a band and a pane showing the tokens the last task used, by kind, model, subagent and tool."
+    },
+    {
+      "name": "nextphase-pipeline-view",
+      "source": "./plugins/nextphase-pipeline-view",
+      "description": "Pipeline view: a pane and status line showing where a project's current milestone stands, from a snapshot the project's own collector prints."
+    }
+  ]
+}

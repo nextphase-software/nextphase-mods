@@ -1,0 +1,19 @@
+{
+  "name": "nextphase-task-tokens",
+  "version": "1.3.1",
+  "description": "Task tokens: a band above the prompt and a pane showing the new tokens the last task used, apart from the context re-read from the cache, by kind, model, subagent and tool, with the five-hour and weekly allowance used and an on/off switch.",
+  "author": {
+    "name": "NextPhase Software",
+    "url": "https://github.com/nextphase-software"
+  },
+  "types": "./types/index.d.ts",
+  "keywords": [
+    "tokens",
+    "usage",
+    "pane",
+    "band"
+  ],
+  "homepage": "https://github.com/nextphase-software/nextphase-mods/tree/main/plugins/nextphase-task-tokens",
+  "repository": "https://github.com/nextphase-software/nextphase-mods",
+  "license": "MIT"
+}

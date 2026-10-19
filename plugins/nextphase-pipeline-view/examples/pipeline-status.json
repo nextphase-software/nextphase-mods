@@ -1,0 +1,15 @@
+{
+  "id": "M3",
+  "title": "Checkout page",
+  "stages": ["Plan", "Build", "Review", "Ship"],
+  "gates": { "Review": "Approve the review", "Ship": "Approve the release" },
+  "stage": "Build",
+  "stage_started": null,
+  "now": "writing the payment form",
+  "your_turn": null,
+  "done": false,
+  "log": [
+    { "at": "14:05", "text": "Plan approved" },
+    { "at": "14:20", "text": "Build started" }
+  ]
+}
