@@ -84,7 +84,7 @@ Keep `.claude/pipeline-status.json` current as the work moves:
 - When the work is finished, set `done` to true.
 ```
 
-**6. Open the pane and approve the collector.** In Claude Code, run `/reload-plugins`, then `/pipeline`. The pane shows the command your project asks to run. Read it, then type:
+**6. Open the pane and approve the collector.** In Claude Code, run `/pipeline`. It reads `.claude/nextphase-pipeline-view.json` each time it runs, so a file added during a session counts without a reload or a new session. The pane shows the command your project asks to run. Read it, then type:
 
 ```
 /pipeline allow

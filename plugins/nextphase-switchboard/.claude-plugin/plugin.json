@@ -1,0 +1,20 @@
+{
+  "name": "nextphase-switchboard",
+  "version": "0.2.0",
+  "description": "Switchboard: a pane listing every installed plugin and mod, each with an on/off toggle that enables or disables it and reloads plugins in the open chat.",
+  "author": {
+    "name": "NextPhase Software",
+    "url": "https://github.com/nextphase-software"
+  },
+  "types": "./types/index.d.ts",
+  "keywords": [
+    "plugins",
+    "mods",
+    "switchboard",
+    "pane",
+    "toggle"
+  ],
+  "homepage": "https://github.com/nextphase-software/nextphase-mods/tree/main/plugins/nextphase-switchboard",
+  "repository": "https://github.com/nextphase-software/nextphase-mods",
+  "license": "MIT"
+}

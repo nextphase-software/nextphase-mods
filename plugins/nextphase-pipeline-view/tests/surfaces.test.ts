@@ -33,8 +33,8 @@ const flatten = (node: any): string =>
         ? node.map(flatten).join('')
         : `${node.props?.label ?? ''}${flatten(node.children)}${node.type === 'Text' ? '' : '\n'}`
 
-/** A session in /work whose project file names tools/collect.py; `script` is that file's text. */
-const start = async ($: any, on: any, stdout: () => string, opts: { approve?: boolean; script?: () => string } = {}) => {
+/** A session in /work whose project file names tools/collect.py; `script` is that file's text, `exists` whether the project file is there. */
+const start = async ($: any, on: any, stdout: () => string, opts: { approve?: boolean; script?: () => string; exists?: () => boolean } = {}) => {
   mock.store(on)
   const clock = mock.clock(on, { now: 1_800_000_000_000 })
   const runs: string[][] = []
@@ -45,7 +45,7 @@ const start = async ($: any, on: any, stdout: () => string, opts: { approve?: bo
   on('ui.open', () => ({ value: { isPlaced: true } }))
   on('ui.status', () => ({ value: undefined }))
   on('ui.notify', () => ({ value: { isSent: true } }))
-  on('fs.exists', () => ({ value: true }))
+  on('fs.exists', () => ({ value: opts.exists?.() ?? true }))
   on('fs.read', (_$: any, e: any) =>
     String(e.path).endsWith('tools/collect.py')
       ? { value: { base64: btoa(script()) } }
@@ -139,6 +139,30 @@ for (const surface of ['desktop', 'terminal'] as const) {
     await $.command.run({ command: 'pipeline', args: 'revoke', origin: { kind: 'composer' } } as any)
     await clock.advance(10_000)
     expect(runs).toHaveLength(before)
+  })
+}
+
+for (const surface of ['desktop', 'terminal'] as const) {
+  test(`a project file added after the session started counts from the next /pipeline on ${surface}`, async ($, on) => {
+    let present = false
+    const { runs, clock } = await start($, on, () => JSON.stringify(snapshot(6, null)), { approve: false, exists: () => present })
+    const before = await $.command.run({ command: 'pipeline', args: '', origin: { kind: 'composer' } } as any)
+    expect(before.text).toContain('no collector is configured')
+
+    // The file appears mid-session; neither session.start nor a reload runs again.
+    present = true
+    const opened = await $.command.run({ command: 'pipeline', args: '', origin: { kind: 'composer' } } as any)
+    expect(opened.text).toBe('Pipeline view opened.')
+    const pane = await $.ui.mount({ plugin: PLUGIN, surface, component: 'Pane', requestId: PLUGIN, props: paneProps(40) })
+    expect(flatten(await pane.drawn())).toContain("Approve this project's collector?")
+    expect(runs).toHaveLength(0)
+
+    await $.command.run({ command: 'pipeline', args: 'allow', origin: { kind: 'composer' } } as any)
+    expect(flatten(await pane.drawn())).toContain('Nothing needed from you right now.')
+    const after = runs.length
+    expect(after).toBeGreaterThan(0)
+    await clock.advance(10_000)
+    expect(runs.length).toBeGreaterThan(after)
   })
 }
 

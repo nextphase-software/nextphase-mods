@@ -170,17 +170,15 @@ export const register: Register = (on, options) => {
   let argv: string[] | undefined
   let source: Choice['source'] = 'none'
   let collectNow: (() => Promise<void>) | undefined
+  let resolveNow: (() => Promise<void>) | undefined
   on('session.start', async ($, e, next) => {
     // The same command under a short name and the plugin's own.
     await $.command.register({ name: 'pipeline', description: "Show this project's milestone pipeline in a pane" })
     await $.command.register({ name: 'nextphase-pipeline-view', description: "Show this project's milestone pipeline in a pane. Short form: /pipeline" })
-    const file = (await $.fs.exists(PROJECT_FILE)) ? await $.fs.read(PROJECT_FILE).catch(() => undefined) : undefined
-    const choice = chooseCollector(typeof file === 'string' ? file : undefined, String(options.collector ?? ''))
-    argv = collectorArgv(choice.collector)
-    source = choice.source
     const cwd = await $.session.cwd()
     // The first snapshot of a session is the baseline: notifications are for changes seen while it runs.
     let last: Snapshot | undefined
+    let ticking = false
     const tell = async (text: string) => {
       if (!(await $.ui.notify(text, { title: 'Pipeline' })).isSent) await $.ui.toast(text)
     }
@@ -216,18 +214,38 @@ export const register: Register = (on, options) => {
       await update($, snapshot, () => snap)
       await $.ui.status(statusLine(snap))
     }
+    // Read at the start and again on each command, so a project file added mid-session
+    // counts: session.start runs once per process, and a reload skips an unchanged plugin.
+    const resolve = async (): Promise<boolean> => {
+      const file = (await $.fs.exists(PROJECT_FILE)) ? await $.fs.read(PROJECT_FILE).catch(() => undefined) : undefined
+      const choice = chooseCollector(typeof file === 'string' ? file : undefined, String(options.collector ?? ''))
+      const chosen = collectorArgv(choice.collector)
+      const changed = chosen?.join('\u0000') !== argv?.join('\u0000') || choice.source !== source
+      argv = chosen
+      source = choice.source
+      if (argv && !ticking) {
+        ticking = true
+        $.clock.every(10000, () => collect())
+      }
+      return changed
+    }
     collectNow = collect
+    resolveNow = async () => {
+      if (await resolve()) await collect()
+    }
+    await resolve()
     void collect()
-    if (argv) $.clock.every(10000, () => collect())
     return next(e)
   })
 
   // `/pipeline` opens the pane; `/pipeline allow` approves this project's collector as it
   // stands now; `/pipeline revoke` withdraws that. The same under the plugin's own name.
   on('command.run', { command: 'pipeline' }, async ($, e) => {
+    await resolveNow?.()
     return pipelineCommand($, e.args, e.origin.kind, argv, source, collectNow)
   })
   on('command.run', { command: 'nextphase-pipeline-view' }, async ($, e) => {
+    await resolveNow?.()
     return pipelineCommand($, e.args, e.origin.kind, argv, source, collectNow)
   })
 

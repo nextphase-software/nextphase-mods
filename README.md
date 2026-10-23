@@ -1,15 +1,16 @@
 # NextPhase plugins for Claude Code
 
-Two plugins from [NextPhase Software](https://github.com/nextphase-software) that add live views to Claude Code. Both work only with data on your machine and send nothing anywhere.
+Three plugins from [NextPhase Software](https://github.com/nextphase-software) that add live views to Claude Code. All three work only with data on your machine and send nothing anywhere.
 
 | Plugin | What it adds | Setup |
 | --- | --- | --- |
 | [`nextphase-task-tokens`](plugins/nextphase-task-tokens) | A line above the prompt, and a pane, showing what each task cost in tokens: by kind, model, subagent and tool, with your 5-hour and weekly allowance | None: install and it works |
 | [`nextphase-pipeline-view`](plugins/nextphase-pipeline-view) | A pane, a status-line entry and notifications showing which stage your work is in and whether a decision is waiting for you | About five minutes per project: a status file, a starter collector and a few lines in `CLAUDE.md`. Its README walks through it |
+| [`nextphase-switchboard`](plugins/nextphase-switchboard) | A pane, opened with `/nextphase-switchboard` (short form `/switchboard`), listing every installed plugin and mod with an on/off toggle for each; a toggle enables or disables it and reloads plugins in the open chat | None: install and it works |
 
 ## Requirements
 
-- **A Claude Code build that loads plugin hook modules.** This plugin surface is early access and may change between releases. Both plugins were built and tested with Claude Code 2.1.299; older builds, such as 2.1.233, refuse to load them. Run `claude --version` to check yours.
+- **A Claude Code build that loads plugin hook modules.** This plugin surface is early access and may change between releases. The plugins were built and tested with Claude Code 2.1.299; older builds, such as 2.1.233, refuse to load them. Run `claude --version` to check yours.
 - **Python 3**, only for the pipeline view's starter collector.
 
 ## Install
@@ -20,6 +21,7 @@ Add the marketplace once, then install the plugins you want:
 claude plugin marketplace add nextphase-software/nextphase-mods
 claude plugin install nextphase-task-tokens@nextphase
 claude plugin install nextphase-pipeline-view@nextphase
+claude plugin install nextphase-switchboard@nextphase
 ```
 
 Inside Claude Code, the same works as `/plugin marketplace add nextphase-software/nextphase-mods`, then `/plugin install <name>@nextphase`. Run `/reload-plugins` to load a newly installed plugin into an open session.

@@ -5,7 +5,7 @@
     "url": "https://github.com/nextphase-software"
   },
   "metadata": {
-    "description": "Claude Code plugins from NextPhase Software: a live view of a project's delivery pipeline, and a per-task token breakdown."
+    "description": "Claude Code plugins from NextPhase Software: a live view of a project's delivery pipeline, a per-task token breakdown, and a switchboard to turn plugins on and off."
   },
   "plugins": [
     {
@@ -17,6 +17,11 @@
       "name": "nextphase-pipeline-view",
       "source": "./plugins/nextphase-pipeline-view",
       "description": "Pipeline view: a pane and status line showing where a project's current milestone stands, from a snapshot the project's own collector prints."
+    },
+    {
+      "name": "nextphase-switchboard",
+      "source": "./plugins/nextphase-switchboard",
+      "description": "Switchboard: a pane listing every installed plugin and mod, with an on/off toggle for each that enables or disables it and reloads plugins in the open chat."
     }
   ]
 }

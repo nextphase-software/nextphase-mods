@@ -1,6 +1,6 @@
 {
   "name": "nextphase-pipeline-view",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Pipeline view: a pane and status line showing which stage your current piece of work is in and whether a decision is waiting for you, drawn from a snapshot your project's own collector prints.",
   "author": {
     "name": "NextPhase Software",
